@@ -22,6 +22,7 @@ import com.ronit.cosmic.feature_auth.presentation.sign_in.GoogleAuthUiClient
 import com.ronit.cosmic.feature_auth.presentation.sign_in.SignInScreen
 import com.ronit.cosmic.feature_auth.presentation.sign_in.SignInViewModel
 import com.ronit.cosmic.feature_auth.presentation.sign_up.SignUpScreen
+import com.ronit.cosmic.feature_feed.presentation.FeedScreen
 import com.ronit.cosmic.util.Screen
 import kotlinx.coroutines.launch
 
@@ -56,12 +57,8 @@ fun Navigation(
         composable(
                 route= Screen.Home.route,
         ){
-            Home(userID = googleAuthUiClient.getSignedInUser()?.userName ){
-               lifecycleOwner.lifecycleScope.launch {
-                   googleAuthUiClient.signOut()
-                   navController.popBackStack()
-               }
-            }
+
+            FeedScreen()
         }
     }
 }

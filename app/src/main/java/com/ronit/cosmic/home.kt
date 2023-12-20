@@ -6,10 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.ronit.cosmic.feature_feed.presentation.FeedViewModel
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun Home(
     userID:String?,
+    feedViewModel: FeedViewModel= hiltViewModel(),
     logout:()->Unit
 ){
     Column(
@@ -17,6 +21,6 @@ fun Home(
             .fillMaxSize()
             .clickable { logout() }
     ) {
-        Text(text = userID?:"null")
+
     }
 }
