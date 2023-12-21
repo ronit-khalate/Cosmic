@@ -7,7 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.ronit.cosmic.core.presentation.Navigation
+import com.ronit.cosmic.core.presentation.MainScreen
 import com.ronit.cosmic.feature_auth.presentation.sign_in.GoogleAuthUiClient
 import com.ronit.cosmic.ui.theme.CosmicTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,9 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CosmicTheme {
 
-
-
-                Navigation(googleAuthUiClient = googleAuthUiClient)
+                MainScreen(googleAuthUiClient = googleAuthUiClient)
             }
         }
     }

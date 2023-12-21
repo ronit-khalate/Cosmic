@@ -1,10 +1,12 @@
 package com.ronit.cosmic.core.presentation
 
-import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,48 +17,62 @@ import com.ronit.cosmic.feature_feed.presentation.FeedScreen
 import com.ronit.cosmic.core.utility.Screen
 import com.ronit.cosmic.feature_feed.presentation.WebPAgeScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navigation(
+fun MainScreen(
     googleAuthUiClient:GoogleAuthUiClient,
 
 ){
+
     val navController = rememberNavController()
-    val lifecycleOwner = LocalLifecycleOwner.current
-    Log.d("userR","${googleAuthUiClient.getSignedInUser()?.userId}")
-    NavHost(
-            navController = navController,
-            startDestination =if(googleAuthUiClient.getSignedInUser()!=null){ Screen.Home.route }else{ Screen.SignIn.route}
+    Scaffold(
+            topBar = {},
+            bottomBar = {}
+    ) {
 
-    ){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            NavHost(
+                    navController = navController,
+                    startDestination =if(googleAuthUiClient.getSignedInUser()!=null){ Screen.Home.route }else{ Screen.SignIn.route}
 
-        composable(route= Screen.SignIn.route){
+            ){
 
-            SignInScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    googleAuthUiClient = googleAuthUiClient,
-                    navController=navController
-            )
-        }
+                composable(route= Screen.SignIn.route){
 
-        composable(route= Screen.SignUp.route){
+                    SignInScreen(
+                            modifier = Modifier.fillMaxSize(),
+                            googleAuthUiClient = googleAuthUiClient,
+                            navController=navController
+                    )
+                }
 
-            SignUpScreen(navController = navController)
-        }
+                composable(route= Screen.SignUp.route){
 
-        composable(
-                route= Screen.Home.route,
-        ){
+                    SignUpScreen(navController = navController)
+                }
 
-            FeedScreen(navController=navController)
-        }
+                composable(
+                        route= Screen.Home.route,
+                ){
 
-        composable(
-                route= Screen.WebScreen.routeWithArg,
-                arguments = Screen.WebScreen.argument
-        ){
-            WebPAgeScreen(newsUrl = it.arguments?.getString(Screen.WebScreen.newsUrlArgument)?:"") {
-                navController.popBackStack()
+                    FeedScreen(navController=navController)
+                }
+
+                composable(
+                        route= Screen.WebScreen.routeWithArg,
+                        arguments = Screen.WebScreen.argument
+                ){
+                    WebPAgeScreen(newsUrl = it.arguments?.getString(Screen.WebScreen.newsUrlArgument)?:"") {
+                        navController.popBackStack()
+                    }
+                }
             }
         }
+
     }
+
 }
