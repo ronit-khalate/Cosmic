@@ -40,16 +40,18 @@ class ArticleRemoteMediator(
                     Log.d("response","${remoteKeys?.nextPage?:"null"}")
                     val nextPage = remoteKeys.nextPage
                         ?: return MediatorResult.Success(
-                                endOfPaginationReached = remoteKeys != null
+                                endOfPaginationReached = true
                         )
                     nextPage
                 }
             }
 
-            val response = articleApi.getArticles(limit = ARTICLES_PER_PAGE, offset = currentPage).results.map {
-                it.toArticleEntity()
-            }
 
+            val savedArticleIds = articleDb.savedArticleDao.getAllSavedArticlesIDs()
+
+            val response = articleApi.getArticles(limit = ARTICLES_PER_PAGE, offset = currentPage).results.map {
+                it.toArticleEntity(savedArticleIds.contains(it.id))
+            }
 
 
             Log.d("load type","${loadType.name} : ${currentPage}")

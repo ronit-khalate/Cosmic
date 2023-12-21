@@ -9,4 +9,5 @@ interface StorageFeatureRepository {
     suspend fun saveArticle(article: SavedArticleEntity)
 
     suspend fun removeArticle(article: SavedArticleEntity)
+    suspend fun getSavedArticlesId():List<Int>
 }

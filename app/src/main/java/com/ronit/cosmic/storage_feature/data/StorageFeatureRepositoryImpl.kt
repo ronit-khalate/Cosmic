@@ -1,5 +1,6 @@
 package com.ronit.cosmic.storage_feature.data
 
+import androidx.room.withTransaction
 import com.ronit.cosmic.core.data.local_source.model.ArticleDatabase
 import com.ronit.cosmic.core.data.local_source.model.SavedArticleEntity
 import com.ronit.cosmic.storage_feature.domain.repository.StorageFeatureRepository
@@ -14,10 +15,25 @@ class StorageFeatureRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveArticle(article: SavedArticleEntity) {
-        return articleDb.savedArticleDao.saveArticle(article)
+
+        articleDb.withTransaction {
+            articleDb.savedArticleDao.saveArticle(article)
+            articleDb.cachedArticleDao.saveArticle(article.id)
+        }
     }
 
     override suspend fun removeArticle(article: SavedArticleEntity) {
-        return articleDb.savedArticleDao.removeArticle(article)
+
+        articleDb.withTransaction {
+
+            articleDb.savedArticleDao.removeArticle(article)
+            articleDb.cachedArticleDao.unSaveArticle(article.id)
+        }
+
+    }
+
+    override suspend fun getSavedArticlesId(): List<Int> {
+
+        return articleDb.savedArticleDao.getAllSavedArticlesIDs()
     }
 }

@@ -44,7 +44,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -67,6 +69,7 @@ import coil.request.ImageRequest
 import com.ronit.cosmic.R
 import com.ronit.cosmic.core.utility.Screen
 import com.ronit.cosmic.feature_feed.domain.Article
+import okhttp3.internal.notify
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.nio.file.WatchEvent
@@ -94,19 +97,17 @@ fun FeedScreen(
         ){index->
 
             val item =articles[index]
-            if(index+5==articles.itemCount){
-            }
-            item?.let {
+
+
+            item?.let {article->
 
                 ArticleCard(
-                        article = it,
+                        article = article,
                         openNews = {
-                            val encodedUrl = URLEncoder.encode(it.newsUrl, StandardCharsets.UTF_8.toString())
+                            val encodedUrl = URLEncoder.encode(article.newsUrl, StandardCharsets.UTF_8.toString())
                             navController.navigate(route = "${Screen.WebScreen.route}/$encodedUrl")
                         },
-                        onSave = {
-
-                        }
+                        viewModel
                 )
             }
 
@@ -122,12 +123,13 @@ fun FeedScreen(
 fun ArticleCard(
     article:Article,
     openNews:()->Unit,
-    onSave:()->Unit
+    viewModel: FeedViewModel
 ){
 
     var expanded by remember{ mutableStateOf(false) }
     val density= LocalDensity.current
     var isNewsOpenedInWeb by remember{ mutableStateOf(false) }
+    var isSaved by remember { mutableStateOf(article.isSaved) }
 
     Card(
             modifier = Modifier
@@ -155,7 +157,7 @@ fun ArticleCard(
                     model =ImageRequest.Builder(LocalContext.current)
                         .data(article.imageUrl)
                         .crossfade(true)
-                        .crossfade(200)
+                        .crossfade(10)
                         .build(),
                     contentDescription =article.title,
                     modifier = Modifier
@@ -221,10 +223,25 @@ fun ArticleCard(
                     horizontalArrangement = Arrangement.End
             ){
 
-                IconButton(onClick = {
+                IconButton(onClick ={
+
+                        if(isSaved){
+                            viewModel.removeArticle(article){
+                                isSaved=false
+                            }
+                        }
+                        else{
+                            viewModel.saveArticle(article){
+                                isSaved=true
+                            }
+                        }
 
                 }) {
-                    Image(painter = painterResource(id = R.drawable.bookmark_outlined), contentDescription ="Save")
+                    Image(
+                            painter = if(isSaved) painterResource(id = R.drawable.bookmark_filled) else painterResource(id = R.drawable.bookmark_outlined),
+                            contentDescription ="Save",
+                            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground)
+                    )
                 }
             }
 
@@ -239,21 +256,4 @@ fun ArticleCard(
 
 
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun preview(){
-
-    ArticleCard(
-        article =Article(
-                id = 21892,
-                title = "D-Orbit ION Space Tug Hosts In-Orbit Refueling Demo",
-                newsUrl = "",
-                imageUrl = "",
-                newsSite = "This is News Site",
-                summary = "A payload launched aboard the thirteenth D-Orbit ION space tug will demonstrate key technology that will enable future in-orbit refueling systems. The thirteenth D-Orbit ION space tug, which was named Daring Diego, was launched aboard a SpaceX Falcon 9 rideshare mission on 1 December, carrying eight passengers and four hosted payloads. One of the hosted […]\\nThe post D-Orbit ION Space Tug Hosts In-Orbit Refueling Demo appeared first on European Spaceflight."
-
-        ),{},{}
-    )
 }

@@ -12,5 +12,6 @@ data class CachedArticleEntity(
         val newsUrl:String?,
         val imageUrl:String?,
         val newsSite:String?,
-        val summary:String
+        val summary:String,
+        var isSaved:Boolean=false
 )

@@ -1,4 +1,4 @@
-package com.ronit.cosmic.core.data.local_source.model.dao
+package com.ronit.cosmic.core.data.local_source.dao
 
 import androidx.room.Dao
 import androidx.room.Delete

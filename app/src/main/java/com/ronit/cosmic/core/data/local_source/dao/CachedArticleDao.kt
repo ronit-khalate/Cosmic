@@ -1,4 +1,4 @@
-package com.ronit.cosmic.core.data.local_source.model.dao
+package com.ronit.cosmic.core.data.local_source.dao
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
@@ -15,4 +15,9 @@ interface CachedArticleDao {
     fun pagingSource():PagingSource<Int,CachedArticleEntity>
     @Query("DELETE FROM $CACHED_ARTICLE_TABLE")
     suspend fun clearAll()
+
+    @Query("UPDATE $CACHED_ARTICLE_TABLE SET isSaved = 0 WHERE id =:articleId")
+    suspend fun unSaveArticle( articleId:Int)
+    @Query("UPDATE $CACHED_ARTICLE_TABLE SET isSaved = 1 WHERE id =:articleId")
+    suspend fun saveArticle( articleId:Int)
 }
