@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
             CosmicTheme {
 
 
+
                 Navigation(googleAuthUiClient = googleAuthUiClient)
             }
         }
