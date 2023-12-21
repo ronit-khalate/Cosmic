@@ -7,9 +7,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ronit.cosmic.core.presentation.components.TopBar
 import com.ronit.cosmic.feature_auth.presentation.sign_in.GoogleAuthUiClient
 import com.ronit.cosmic.feature_auth.presentation.sign_in.SignInScreen
 import com.ronit.cosmic.feature_auth.presentation.sign_up.SignUpScreen
@@ -26,7 +28,7 @@ fun MainScreen(
 
     val navController = rememberNavController()
     Scaffold(
-            topBar = {},
+            topBar = { TopBar()},
             bottomBar = {}
     ) {
 
@@ -34,6 +36,7 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
+                .padding(start = 10.dp, end = 10.dp)
         ) {
             NavHost(
                     navController = navController,
@@ -44,7 +47,8 @@ fun MainScreen(
                 composable(route= Screen.SignIn.route){
 
                     SignInScreen(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.fillMaxSize()
+                                .padding(top=30.dp),
                             googleAuthUiClient = googleAuthUiClient,
                             navController=navController
                     )
