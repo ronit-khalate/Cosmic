@@ -7,9 +7,8 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.ronit.cosmic.core.data.local_source.model.ArticleDatabase
-import com.ronit.cosmic.core.data.local_source.model.ArticleEntity
-import com.ronit.cosmic.core.data.local_source.model.RemotePageKeys
-import com.ronit.cosmic.core.data.mappers.toArticle
+import com.ronit.cosmic.core.data.local_source.model.CachedArticleEntity
+import com.ronit.cosmic.core.data.local_source.model.RemotePageKeysEntity
 import com.ronit.cosmic.core.data.mappers.toArticleEntity
 import com.ronit.cosmic.core.data.remote_source.api.ArticleApi
 import com.ronit.cosmic.core.utility.Constants.ARTICLES_PER_PAGE
@@ -21,10 +20,10 @@ class ArticleRemoteMediator(
 
         private val articleDb:ArticleDatabase,
         private val articleApi: ArticleApi
-): RemoteMediator<Int, ArticleEntity>() {
+): RemoteMediator<Int, CachedArticleEntity>() {
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, ArticleEntity>
+        state: PagingState<Int, CachedArticleEntity>
     ): MediatorResult {
         return try {
 
@@ -65,12 +64,12 @@ class ArticleRemoteMediator(
 
                 if(loadType==LoadType.REFRESH){
                     articleDb.remotePageKeysDao.deleteAllRemoteKeys()
-                    articleDb.articleDao.clearAll()
+                    articleDb.cachedArticleDao.clearAll()
                 }
 
                 val keys = response.map { articleDto->
 
-                    RemotePageKeys(
+                    RemotePageKeysEntity(
                             id = articleDto.id,
                             previousPage=previousPage,
                             nextPage = nextPage
@@ -79,7 +78,7 @@ class ArticleRemoteMediator(
 
 
                 articleDb.remotePageKeysDao.addAllRemoteKeys(remoteKeys = keys)
-                articleDb.articleDao.upsertAll(articles = response)
+                articleDb.cachedArticleDao.upsertAll(articles = response)
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPagination)
@@ -92,8 +91,8 @@ class ArticleRemoteMediator(
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state:PagingState<Int,ArticleEntity>
-    ):RemotePageKeys?{
+        state:PagingState<Int,CachedArticleEntity>
+    ):RemotePageKeysEntity?{
 
         return  state.anchorPosition?.let {position->
             state.closestItemToPosition(position)?.id?.let {id->
@@ -103,8 +102,8 @@ class ArticleRemoteMediator(
     }
 
     private suspend fun getRemoteKeyForFirstItem(
-        state: PagingState<Int, ArticleEntity>
-    ):RemotePageKeys?{
+        state: PagingState<Int, CachedArticleEntity>
+    ):RemotePageKeysEntity?{
 
         return state.pages.firstOrNull{it.data.isNotEmpty()}?.data?.firstOrNull()
             ?.let {
@@ -115,8 +114,8 @@ class ArticleRemoteMediator(
     }
 
     private suspend fun getRemoteKeyForLastItem(
-        state: PagingState<Int, ArticleEntity>
-    ):RemotePageKeys?{
+        state: PagingState<Int, CachedArticleEntity>
+    ):RemotePageKeysEntity?{
         val state=state
         val page = state.pages.firstOrNull { it.data.isNotEmpty() }
         val data = page?.data?.firstOrNull()

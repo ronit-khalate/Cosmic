@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,16 +24,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,11 +50,13 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -58,14 +64,19 @@ import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.ronit.cosmic.R
+import com.ronit.cosmic.core.utility.Screen
 import com.ronit.cosmic.feature_feed.domain.Article
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.nio.file.WatchEvent
 
 
 @Composable
 fun FeedScreen(
     viewModel: FeedViewModel= hiltViewModel(),
-    articles: LazyPagingItems<Article> = viewModel.articlePagingFlow.collectAsLazyPagingItems()
+    articles: LazyPagingItems<Article> = viewModel.articlePagingFlow.collectAsLazyPagingItems(),
+    navController: NavController
 ){
 
 //    val articles viewModel.articlePagingFlow.collectAsLazyPagingItems()
@@ -87,7 +98,16 @@ fun FeedScreen(
             }
             item?.let {
 
-                ArticleCard(article = it)
+                ArticleCard(
+                        article = it,
+                        openNews = {
+                            val encodedUrl = URLEncoder.encode(it.newsUrl, StandardCharsets.UTF_8.toString())
+                            navController.navigate(route = "${Screen.WebScreen.route}/$encodedUrl")
+                        },
+                        onSave = {
+
+                        }
+                )
             }
 
         }
@@ -96,14 +116,18 @@ fun FeedScreen(
 }
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticleCard(
-    article:Article
+    article:Article,
+    openNews:()->Unit,
+    onSave:()->Unit
 ){
 
     var expanded by remember{ mutableStateOf(false) }
     val density= LocalDensity.current
+    var isNewsOpenedInWeb by remember{ mutableStateOf(false) }
 
     Card(
             modifier = Modifier
@@ -123,7 +147,7 @@ fun ArticleCard(
            Surface(
                    modifier = Modifier
                        .fillMaxSize()
-                       .heightIn(min=160.dp),
+                       .heightIn(min = 160.dp),
                    shape = RoundedCornerShape(20.dp)
            ) {
 
@@ -145,8 +169,7 @@ fun ArticleCard(
             Spacer(modifier = Modifier.height(10.dp))
             Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = Color.Green),
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.Top,
                     horizontalArrangement = Arrangement.Start
             ) {
@@ -177,13 +200,35 @@ fun ArticleCard(
                     Text(
                             text = "News Site : ${article.newsSite}",
                             modifier = Modifier
-                                .clickable {  }
+                                .clickable { 
+                                    isNewsOpenedInWeb=!isNewsOpenedInWeb
+                                    if(isNewsOpenedInWeb) {
+                                        openNews()
+                                    }
+                                }
                     )
                 }
 
 
 
             }
+
+            Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+            ){
+
+                IconButton(onClick = {
+
+                }) {
+                    Image(painter = painterResource(id = R.drawable.bookmark_outlined), contentDescription ="Save")
+                }
+            }
+
+
 
 
 
@@ -209,6 +254,6 @@ fun preview(){
                 newsSite = "This is News Site",
                 summary = "A payload launched aboard the thirteenth D-Orbit ION space tug will demonstrate key technology that will enable future in-orbit refueling systems. The thirteenth D-Orbit ION space tug, which was named Daring Diego, was launched aboard a SpaceX Falcon 9 rideshare mission on 1 December, carrying eight passengers and four hosted payloads. One of the hosted […]\\nThe post D-Orbit ION Space Tug Hosts In-Orbit Refueling Demo appeared first on European Spaceflight."
 
-        )
+        ),{},{}
     )
 }

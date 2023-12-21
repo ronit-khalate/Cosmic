@@ -4,7 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.ronit.cosmic.core.data.local_source.model.ArticleDatabase
-import com.ronit.cosmic.core.data.local_source.model.ArticleEntity
+import com.ronit.cosmic.core.data.local_source.model.CachedArticleEntity
 import com.ronit.cosmic.core.data.remote_source.ArticleRemoteMediator
 import com.ronit.cosmic.core.data.remote_source.api.ArticleApi
 import com.ronit.cosmic.core.utility.Constants.ARTICLES_PER_PAGE
@@ -25,7 +25,7 @@ object AppModule {
     fun provideFeedPager(
         articleDatabase:ArticleDatabase,
         articleApi: ArticleApi
-    ):Pager<Int,ArticleEntity>{
+    ):Pager<Int,CachedArticleEntity>{
 
         return Pager(
                 config = PagingConfig(ARTICLES_PER_PAGE),
@@ -34,7 +34,7 @@ object AppModule {
                         articleApi=articleApi
                 ),
                 pagingSourceFactory = {
-                    articleDatabase.articleDao.pagingSource()
+                    articleDatabase.cachedArticleDao.pagingSource()
 
                 }
 

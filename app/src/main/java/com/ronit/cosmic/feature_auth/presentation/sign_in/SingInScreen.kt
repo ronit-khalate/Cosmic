@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,7 +35,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
@@ -44,12 +42,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.ronit.cosmic.R
 import com.ronit.cosmic.feature_auth.domain.model.AuthResponse
 import com.ronit.cosmic.feature_auth.presentation.sign_in.state.SignInEvent
-import com.ronit.cosmic.util.Screen
+import com.ronit.cosmic.core.utility.Screen
 import kotlinx.coroutines.launch
 
 
@@ -110,7 +107,7 @@ fun SignInScreen(
 
         if(signInViewModel.authAuthResponse==AuthResponse.Success){
             navController.navigate(Screen.Home.route)
-            navController.popBackStack(route = Screen.Home.route,inclusive = false)
+            navController.popBackStack(route = Screen.Home.route, inclusive = false)
         }
 
     }
@@ -143,7 +140,7 @@ fun SignInScreen(
                 if (state) {
                     AdditionalInfoScreen(signInViewModel = signInViewModel){
                         navController.navigate(Screen.Home.route)
-                        navController.popBackStack(route = Screen.Home.route,inclusive = false)
+                        navController.popBackStack(route = Screen.Home.route, inclusive = false)
                     }
                 }
                 else{
@@ -265,7 +262,7 @@ fun SignInScreen(
                                         }
                                         else if(signInViewModel.authAuthResponse==AuthResponse.Success){
                                             navController.navigate(Screen.Home.route)
-                                            navController.popBackStack(route = Screen.Home.route,inclusive = false)
+                                            navController.popBackStack(route = Screen.Home.route, inclusive = false)
                                         }
 
                                     }

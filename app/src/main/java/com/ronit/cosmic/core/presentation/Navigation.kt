@@ -1,30 +1,19 @@
 package com.ronit.cosmic.core.presentation
 
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ronit.cosmic.Home
-import com.ronit.cosmic.feature_auth.domain.model.UserInfo
 import com.ronit.cosmic.feature_auth.presentation.sign_in.GoogleAuthUiClient
 import com.ronit.cosmic.feature_auth.presentation.sign_in.SignInScreen
-import com.ronit.cosmic.feature_auth.presentation.sign_in.SignInViewModel
 import com.ronit.cosmic.feature_auth.presentation.sign_up.SignUpScreen
 import com.ronit.cosmic.feature_feed.presentation.FeedScreen
-import com.ronit.cosmic.util.Screen
-import kotlinx.coroutines.launch
+import com.ronit.cosmic.core.utility.Screen
+import com.ronit.cosmic.feature_feed.presentation.WebPAgeScreen
 
 @Composable
 fun Navigation(
@@ -49,7 +38,7 @@ fun Navigation(
             )
         }
 
-        composable(route=Screen.SignUp.route){
+        composable(route= Screen.SignUp.route){
 
             SignUpScreen(navController = navController)
         }
@@ -58,7 +47,16 @@ fun Navigation(
                 route= Screen.Home.route,
         ){
 
-            FeedScreen()
+            FeedScreen(navController=navController)
+        }
+
+        composable(
+                route= Screen.WebScreen.routeWithArg,
+                arguments = Screen.WebScreen.argument
+        ){
+            WebPAgeScreen(newsUrl = it.arguments?.getString(Screen.WebScreen.newsUrlArgument)?:"") {
+                navController.popBackStack()
+            }
         }
     }
 }
