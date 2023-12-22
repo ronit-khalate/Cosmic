@@ -31,5 +31,14 @@ sealed class Screen(val route:String)
         )
     }
 
+    object StorageScreen:Screen("StorageScreen")
+
+    companion object{
+
+        val screenListForBottomBar = listOf(
+                Screen.Home,Screen.StorageScreen
+        )
+    }
+
 }
 

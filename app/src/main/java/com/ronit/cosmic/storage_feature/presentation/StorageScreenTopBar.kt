@@ -1,4 +1,4 @@
-package com.ronit.cosmic.core.presentation.components
+package com.ronit.cosmic.storage_feature.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,23 +32,23 @@ import com.ronit.cosmic.R
 
 @Preview(showBackground = true)
 @Composable
-fun TopBar(){
+fun StorageScreenTopBar(){
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(55.dp)
-            .background(color = MaterialTheme.colorScheme.background),
-        verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp)
+                .background(color = MaterialTheme.colorScheme.background),
+            verticalAlignment = Alignment.CenterVertically,
     ){
 
         Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(start = 10.dp)
-                .weight(1f),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(start = 10.dp)
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
         ) {
             Icon(
                     modifier=Modifier
@@ -60,11 +60,11 @@ fun TopBar(){
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(0.7f),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(0.7f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
@@ -75,11 +75,11 @@ fun TopBar(){
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            verticalAlignment =Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                verticalAlignment =Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
         ) {
 
             IconButton(onClick = { /*TODO*/ }) {

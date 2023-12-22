@@ -47,6 +47,13 @@ fun SavedArticleEntity.toSavedArticle():SavedArticle{
     )
 }
 
+fun SavedArticle.toSavedArticleEntity():SavedArticleEntity{
+
+    return SavedArticleEntity(
+            id, title, newsUrl, imageUrl, newsSite, summary
+    )
+}
+
 fun Article.toSavedArticleEntity():SavedArticleEntity{
     return SavedArticleEntity(
             id =id,
