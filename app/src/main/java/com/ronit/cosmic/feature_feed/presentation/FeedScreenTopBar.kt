@@ -1,4 +1,4 @@
-package com.ronit.cosmic.core.presentation.components
+package com.ronit.cosmic.feature_feed.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

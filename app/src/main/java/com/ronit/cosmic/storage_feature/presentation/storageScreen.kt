@@ -22,6 +22,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,6 +57,7 @@ import java.nio.charset.StandardCharsets
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StorageScreen(
     viewModel: StorageFeatureViewModel= hiltViewModel(),
@@ -63,27 +65,36 @@ fun StorageScreen(
 ){
 
     val articles = viewModel.savedArticles.collectAsState()
-    LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-    ){
-       items(
-               items = articles.value,
-               key = {it.id}
-       ){
 
-           SavedArticleCard(article = it, openNews = {
-               val encodedUrl = URLEncoder.encode(
-                       it.newsUrl,
-                       StandardCharsets.UTF_8.toString()
-               )
-               navController.navigate(route = "${Screen.WebScreen.route}/$encodedUrl")
-           }) {
-               viewModel.removeArticle(it)
-           }
-       }
+    Scaffold(
+
+            topBar = { StorageScreenTopBar()}
+    ) {
+
+        LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+                    .padding(top = 10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            items(
+                    items = articles.value,
+                    key = { it.id }
+            ) {
+
+                SavedArticleCard(article = it, openNews = {
+                    val encodedUrl = URLEncoder.encode(
+                            it.newsUrl,
+                            StandardCharsets.UTF_8.toString()
+                    )
+                    navController.navigate(route = "${Screen.WebScreen.route}/$encodedUrl")
+                }) {
+                    viewModel.removeArticle(it)
+                }
+            }
+        }
     }
 }
 
@@ -102,7 +113,8 @@ fun SavedArticleCard(
     Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(160.dp),
+                .heightIn(160.dp)
+                .padding(top=5.dp, bottom = 5.dp),
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(),
             onClick = {expanded=!expanded}

@@ -38,7 +38,8 @@ fun StorageScreenTopBar(){
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp)
-                .background(color = MaterialTheme.colorScheme.background),
+                .background(color = MaterialTheme.colorScheme.background)
+            ,
             verticalAlignment = Alignment.CenterVertically,
     ){
 
@@ -46,7 +47,7 @@ fun StorageScreenTopBar(){
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(start = 10.dp)
-                    .weight(1f),
+                    .weight(0.8f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.Start
         ) {
@@ -62,13 +63,13 @@ fun StorageScreenTopBar(){
         Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(0.7f),
+                    .weight(1f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
-                    text ="cosmic",
+                    text ="bookmarks",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
             )
@@ -77,7 +78,7 @@ fun StorageScreenTopBar(){
         Row(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(1f),
+                    .weight(0.9f),
                 verticalAlignment =Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
         ) {
@@ -85,9 +86,7 @@ fun StorageScreenTopBar(){
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
             }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings")
-            }
+
         }
     }
 }
