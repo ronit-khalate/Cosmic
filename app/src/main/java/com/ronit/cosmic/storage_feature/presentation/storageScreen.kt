@@ -1,5 +1,6 @@
 package com.ronit.cosmic.storage_feature.presentation
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -105,6 +108,7 @@ fun SavedArticleCard(
     openNews:()->Unit,
     onRemove:()->Unit
 ){
+    val context= LocalContext.current
 
     var expanded by remember{ mutableStateOf(false) }
     val density= LocalDensity.current
@@ -202,6 +206,23 @@ fun SavedArticleCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
             ){
+
+
+                IconButton(onClick = {
+
+                    Intent(Intent.ACTION_SEND).also {
+
+                        it.putExtra(Intent.EXTRA_TEXT, article.newsUrl)
+                        it.putExtra(Intent.EXTRA_SUBJECT, article.title)
+                        it.setType("text/plain")
+                        context.startActivity(Intent.createChooser(it, "Share via"))
+                    }
+
+
+                }) {
+
+                    Image(imageVector = Icons.Default.Share, contentDescription = "Share", colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground))
+                }
 
                 IconButton(onClick =onRemove) {
                     Image(
