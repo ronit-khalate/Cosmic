@@ -1,17 +1,17 @@
 package com.ronit.cosmic.core.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.ronit.cosmic.core.data.remote_source.api.ArticleApi
-import com.ronit.cosmic.core.utility.Constants.BASE_URL
+import com.ronit.cosmic.core.data.remote_source.api.NasaImageApi
+import com.ronit.cosmic.core.utility.Constants.ARTICLE_BASE_URL
+import com.ronit.cosmic.core.utility.Constants.NASA_IMAGES_BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -21,19 +21,49 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit():Retrofit{
+    @ArticleRetrofit
+    fun provideArticleRetrofit():Retrofit{
 
 
         return  Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(ARTICLE_BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
 
+
     @Provides
     @Singleton
-    fun provideArticleApi(retrofit: Retrofit):ArticleApi{
+    @NasaImageRetrofit
+    fun provideNasaRetrofit():Retrofit{
+
+        return Retrofit.Builder()
+            .baseUrl(NASA_IMAGES_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideArticleApi(@ArticleRetrofit retrofit: Retrofit):ArticleApi{
 
         return retrofit.create(ArticleApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideNasaImageApi(@NasaImageRetrofit retrofit: Retrofit):NasaImageApi{
+
+        return  retrofit.create(NasaImageApi::class.java)
+    }
 }
+
+
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ArticleRetrofit
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class NasaImageRetrofit

@@ -3,8 +3,11 @@ package com.ronit.cosmic.core.di
 import androidx.paging.Pager
 import com.ronit.cosmic.core.data.local_source.model.ArticleDatabase
 import com.ronit.cosmic.core.data.local_source.model.CachedArticleEntity
+import com.ronit.cosmic.core.data.remote_source.api.NasaImageApi
 import com.ronit.cosmic.feature_feed.data.FeedPagerRepositoryImpl
 import com.ronit.cosmic.feature_feed.domain.FeedRepository
+import com.ronit.cosmic.feature_search.data.repository.SearchScreenRepositoryImpl
+import com.ronit.cosmic.feature_search.domain.repository.SearchScreenRepository
 import com.ronit.cosmic.storage_feature.data.StorageFeatureRepositoryImpl
 import com.ronit.cosmic.storage_feature.domain.repository.StorageFeatureRepository
 import dagger.Binds
@@ -27,5 +30,10 @@ object RepositoryModule {
     @Provides
     fun provideFeedFeatureRepository(pager: Pager<Int,CachedArticleEntity>):FeedRepository{
         return FeedPagerRepositoryImpl(pager)
+    }
+
+    @Provides
+    fun provideSearchFeatureRepository(nasaImageApi: NasaImageApi):SearchScreenRepository{
+        return SearchScreenRepositoryImpl(nasaImageApi)
     }
 }

@@ -33,6 +33,7 @@ sealed class Screen(val route:String)
 
     object StorageScreen:Screen("StorageScreen")
 
+    object SearchScreen:Screen("SearchScreen")
     companion object{
 
         val screenListForBottomBar = listOf(

@@ -19,6 +19,7 @@ import com.ronit.cosmic.feature_auth.presentation.sign_up.SignUpScreen
 import com.ronit.cosmic.feature_feed.presentation.FeedScreen
 import com.ronit.cosmic.core.utility.Screen
 import com.ronit.cosmic.feature_feed.presentation.WebPAgeScreen
+import com.ronit.cosmic.feature_search.presentation.SearchScreen
 import com.ronit.cosmic.storage_feature.presentation.StorageScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,6 +82,11 @@ fun MainScreen(
                         route=Screen.StorageScreen.route
                 ){
                     StorageScreen(navController = navController)
+                }
+
+                composable(Screen.SearchScreen.route) {
+
+                    SearchScreen()
                 }
             }
         }

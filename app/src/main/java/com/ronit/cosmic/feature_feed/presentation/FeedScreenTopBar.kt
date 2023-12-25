@@ -24,12 +24,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ronit.cosmic.R
+import com.ronit.cosmic.core.utility.Screen
 
 
-@Preview(showBackground = true)
 @Composable
-fun FeedScreenTopBar(){
+fun FeedScreenTopBar(navController: NavController){
 
     Row(
         modifier = Modifier
@@ -79,7 +80,10 @@ fun FeedScreenTopBar(){
             horizontalArrangement = Arrangement.End
         ) {
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate(Screen.SearchScreen.route){
+                launchSingleTop=true
+                restoreState=true
+            } }) {
                 Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
             }
             IconButton(onClick = { /*TODO*/ }) {

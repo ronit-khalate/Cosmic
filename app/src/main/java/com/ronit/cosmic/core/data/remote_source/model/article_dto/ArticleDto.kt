@@ -1,4 +1,4 @@
-package com.ronit.cosmic.core.data.remote_source.model
+package com.ronit.cosmic.core.data.remote_source.model.article_dto
 
 import com.squareup.moshi.Json
 import kotlinx.serialization.SerialName

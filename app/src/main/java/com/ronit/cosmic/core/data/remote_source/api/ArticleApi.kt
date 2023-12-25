@@ -1,7 +1,6 @@
 package com.ronit.cosmic.core.data.remote_source.api
 
-import com.ronit.cosmic.core.data.remote_source.model.ArticleDto
-import com.ronit.cosmic.core.data.remote_source.model.ArticleResponseDto
+import com.ronit.cosmic.core.data.remote_source.model.article_dto.ArticleResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,5 +11,5 @@ interface ArticleApi {
     suspend fun getArticles(
         @Query("limit")limit:Int,
         @Query("offset") offset:Int
-    ):ArticleResponseDto
+    ): ArticleResponseDto
 }

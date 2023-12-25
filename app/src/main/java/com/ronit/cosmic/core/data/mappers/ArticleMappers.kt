@@ -1,9 +1,8 @@
 package com.ronit.cosmic.core.data.mappers
 
-import androidx.compose.runtime.mutableStateOf
 import com.ronit.cosmic.core.data.local_source.model.CachedArticleEntity
 import com.ronit.cosmic.core.data.local_source.model.SavedArticleEntity
-import com.ronit.cosmic.core.data.remote_source.model.ArticleDto
+import com.ronit.cosmic.core.data.remote_source.model.article_dto.ArticleDto
 import com.ronit.cosmic.feature_feed.domain.Article
 import com.ronit.cosmic.storage_feature.domain.SavedArticle
 

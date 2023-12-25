@@ -68,7 +68,7 @@ fun FeedScreen(
 
     Scaffold (
 
-            topBar = { FeedScreenTopBar() }
+            topBar = { FeedScreenTopBar(navController) }
     ){
 
 
